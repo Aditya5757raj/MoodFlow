@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodFlow - Productivity that adapts to your mind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Header/Navigation */
+    header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 3rem;
+    
+    z-index: 1000;
+    animation: slideDown 0.8s ease-out;
+}
+
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+.hero {
+    text-align: center;
+    padding: 6rem 0 3rem;   /* reduced from 12rem / 6rem */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* This is the key line */
+.cta-buttons {
+    margin-top: 3rem;
+}
+
+
+
+
+        .character-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin: 0 auto 3rem;
+        }
+
+        .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .glow-ring-2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .character {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 3px solid rgba(255,255,255,0.4);
+            animation: float 6s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px) scale(1); }
+            50% { transform: translate(-50%, -50%) translateY(-25px) scale(1.05); }
+        }
+
+        .orbs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(102, 126, 234, 0.6));
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+            animation: orbit 12s linear infinite;
+        }
+
+        .orb:nth-child(1) { 
+            width: 16px; 
+            height: 16px;
+            animation-delay: 0s; 
+        }
+        .orb:nth-child(2) { 
+            width: 12px; 
+            height: 12px;
+            animation-delay: -3s; 
+        }
+        .orb:nth-child(3) { 
+            width: 14px; 
+            height: 14px;
+            animation-delay: -6s; 
+        }
+        .orb:nth-child(4) { 
+            width: 10px; 
+            height: 10px;
+            animation-delay: -9s; 
+        }
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(175px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(175px) rotate(-360deg); }
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 700;
+            letter-spacing: -3px;
+            
+            animation: fadeInUp 1s ease-out 0.3s both;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+           
+            background-clip: text;
+        
+        }
+
+      .tagline {
+    font-size: 1.8rem;
+    font-weight: 300;
+    opacity: 0.95;
+    margin-bottom: 1.5rem;   /* was 3rem */
+    animation: fadeInUp 1s ease-out 0.5s both;
+    letter-spacing: 0.5px;
+}
+
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    animation: fadeInUp 1s ease-out 0.7s both;
+    margin-bottom: 1.5rem;
+}
+
+
+        .cta-button {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .cta-button.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '⌄';
+            font-size: 2rem;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 6rem 0;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Image content sections */
+        .content-with-image {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .content-with-image.reverse {
+            direction: rtl;
+        }
+
+        .content-with-image.reverse > * {
+            direction: ltr;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-placeholder:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .content-text p {
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.85;
+        }
+
+        /* Steps */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .step:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .step p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Closing section */
+        .closing {
+            text-align: center;
+            padding: 8rem 0;
+            font-size: 1.6rem;
+            line-height: 2;
+        }
+
+        .closing strong {
+            display: block;
+            margin-top: 2rem;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 26, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-description {
+            opacity: 0.7;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-with-image,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .steps,
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .tagline { font-size: 1.3rem; }
+            .section h2 { font-size: 2rem; }
+            .character-container { width: 250px; height: 250px; }
+            .character { width: 160px; height: 160px; font-size: 3.5rem; }
+            .cta-buttons { flex-direction: column; }
+            header { padding: 1rem 1.5rem; }
+            .hero { padding: 10rem 0 4rem; }
+        }
+
+        /* ============================= */
+/* IMPROVED RESPONSIVE OVERRIDES */
+/* ============================= */
+
+@media (max-width: 768px) {
+    /* Center the Hero and remove extra height */
+    .hero {
+        padding: 7rem 1rem 3rem; /* Added 1rem side padding to prevent text touching edges */
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Keep character, rings, and orbs scaled together */
+    .character-container {
+        width: 235px;
+        height: 235px;
+        margin-bottom: 2rem;
+    }
+
+    .character {
+        width: 140px;
+        height: 140px;
+        font-size: 3.5rem; /* Brain icon looks better slightly smaller on mobile */
+    }
+
+    /* Scale the decorative rings to match the container */
+    .glow-ring { width: 220px; height: 220px; }
+    .glow-ring-2 { width: 260px; height: 260px; }
+
+    /* Fix orbs orbit radius so they don't fly off-screen */
+    @keyframes orbit {
+        0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+        100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+    }
+
+    h1 {
+        font-size: 3.1rem;
+        line-height: 1.1;
+        letter-spacing: -1px;
+        margin-bottom: 0.8rem;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        max-width: 90%; /* Keeps text from getting too wide */
+        margin-bottom: 2rem;
+        line-height: 1.4;
+    }
+
+    .cta-buttons {
+        flex-direction: column; /* Stack buttons for better thumb reach */
+        width: 100%;
+        max-width: 300px;
+        gap: 1rem;
+    }
+
+    .cta-button {
+        width: 100%; /* Full width buttons are standard for mobile UX */
+        padding: 1.1rem 2rem;
+        text-align: center;
+    }
+
+    /* Force grids to single column for all sections */
+    .content-with-image, 
+    .content-with-image.reverse,
+    .steps, 
+    .features {
+        grid-template-columns: 1fr !important;
+        text-align: center;
+        gap: 2.5rem;
+    }
+
+    .content-text p {
+        text-align: center;
+    }
+
+    .scroll-indicator {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 6rem 1rem 2.5rem;
+    }
+
+    .character-container {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 1.8rem;
+    }
+
+    .character {
+        width: 120px;
+        height: 120px;
+        font-size: 3rem;
+    }
+
+    h1 {
+        font-size: 2.6rem;
+    }
+
+    .tagline {
+        font-size: 1.1rem;
+    }
+
+    .section h2 {
+        font-size: 2rem;
+    }
+}
+  
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="stars" id="stars"></div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-container">
+                <div class="logo-icon">🧠</div>
+                <div class="logo-text">MoodFlow</div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#problem">Problem</a></li>
+                    <li><a href="#solution">Solution</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#features">Features</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <div class="character-container">
+                <div class="glow-ring"></div>
+                <div class="glow-ring-2"></div>
+                <div class="character">🧠</div>
+                <div class="orbs">
+                    <div class="orb"></div>
+                    <div class="orb"></div>
+                    <div class="orb"></div>
+                    <div class="orb"></div>
+                </div>
+            </div>
+            <h1>MoodFlow</h1>
+            <p class="tagline">Your workday should adapt to you.</p>
+            <div class="cta-buttons">
+                <a href="#how-it-works" class="cta-button">Discover How</a>
+                <a href="#features" class="cta-button secondary">Learn More</a>
+            </div>
+            <div class="scroll-indicator"></div>
+        </section>
+
+        <section class="section" id="problem">
+            <div class="section-header">
+                <h2> The Problem</h2>
+                <p>Modern productivity tools treat everyone the same — even though humans don't feel the same every day.</p>
+            </div>
+            
+            <div class="content-with-image">
+                <div class="image-placeholder">😔</div>
+                <div class="content-text">
+                    <h3>The Daily Struggle</h3>
+                    <p>Some days you're tired. Some days you're focused. Some days you're stressed. Yet task apps keep pushing the same workload, the same interface, the same pace — causing burnout, frustration, and poor performance.</p>
+                    <p>Your productivity tool should understand you, not drain you.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="solution">
+            <div class="section-header">
+                <h2>💡 The Solution</h2>
+                <p>MoodFlow is a mood-aware productivity system.</p>
+            </div>
+            
+            <div class="content-with-image reverse">
+                <div class="image-placeholder">✨</div>
+                <div class="content-text">
+                    <h3>Productivity Reimagined</h3>
+                    <p>Before asking what you need to do, MoodFlow understands how you feel — and then shapes the entire experience around your state of mind.</p>
+                    <p>It doesn't force productivity. It guides it. It doesn't push harder. It adapts smarter.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="how-it-works">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Three simple steps to transform your productivity experience</p>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Choose Your Mood</h3>
+                    <p>Low Energy, Normal, Focused, or Stressed — tell MoodFlow how you feel right now.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>MoodFlow Adapts</h3>
+                    <p>Colors, motion, and interface shift dynamically to match your emotional state.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Work in Harmony</h3>
+                    <p>Less pressure. More focus. Better flow. Achieve more by respecting your natural rhythm.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="features">
+            <div class="section-header">
+                <h2> Why MoodFlow is Different</h2>
+                <p>Unlike traditional task managers, MoodFlow puts your wellbeing first</p>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Respects Your Energy</h3>
+                    <p>Works with your mental state, not against it. Adapts task difficulty to your current energy level.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🌿</span>
+                    <h3>Reduces Stress</h3>
+                    <p>Encourages healthy productivity instead of burnout. Take breaks when needed, push when ready.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🤝</span>
+                    <h3>Feels Human</h3>
+                    <p>Calm, intelligent, and adaptive — like a personal productivity companion who truly understands you.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🎨</span>
+                    <h3>Dynamic Interface</h3>
+                    <p>Visual environment changes based on mood. Calming blues for stress, energizing colors for focus.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📊</span>
+                    <h3>Smart Insights</h3>
+                    <p>Learn your productivity patterns. Understand when you work best and plan accordingly.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🎯</span>
+                    <h3>Achieves More</h3>
+                    <p>By respecting your limits, you actually accomplish more over time. Sustainable productivity wins.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <p>The future of productivity is not faster.</p>
+            <p>It is smarter. It is human. It is you.</p>
+            <strong>Welcome to MoodFlow.</strong>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">🧠</div>
+                    <div class="footer-logo-text">MoodFlow</div>
+                </div>
+                <p class="footer-description">
+                    Productivity that adapts to your mind. Work smarter, not harder, by aligning your tasks with your emotional state.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">📸</a>
+                    <a href="#" class="social-link">💼</a>
+                </div>
+            </div>
+            
+          <div class="footer-section">
+    <h4>Product</h4>
+    <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Roadmap</a></li>
+    </ul>
+</div>
+
+<div class="footer-section">
+    <h4>Company</h4>
+    <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+
+<div class="footer-section">
+    <h4>Resources</h4>
+    <ul>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Developers</a></li>
+    </ul>
+</div>
+</div>
+
+<div class="footer-bottom">
+    © 2025 MoodFlow. Designed for humans. Built for the future.
+</div>
+</footer>
+    <script>
+        // Generate stars dynamically
+        const starsContainer = document.getElementById('stars');
+        const starCount = 100;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.width = Math.random() * 2 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
+    </script>                       

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodFlow - Login & Signup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .auth-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            perspective: 2000px;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .character-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1rem;
+        }
+
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.8; }
+        }
+
+        .character {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 100%);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255,255,255,0.4);
+            animation: float 6s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+            50% { transform: translate(-50%, -50%) translateY(-12px); }
+        }
+
+        .orbs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .orb {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 12px rgba(255,255,255,0.6);
+            animation: orbit 8s linear infinite;
+        }
+
+        .orb:nth-child(1) { animation-delay: 0s; }
+        .orb:nth-child(2) { animation-delay: -2.67s; }
+        .orb:nth-child(3) { animation-delay: -5.33s; }
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, rgba(255,255,255,0.85));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 4px 20px rgba(255,255,255,0.3);
+        }
+
+        .logo-tagline {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .flip-card-wrapper {
+            position: relative;
+            width: 100%;
+            height: 580px;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card-wrapper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .auth-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.35),
+                inset 0 1px 1px rgba(255,255,255,0.3);
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .auth-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: shimmer 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .auth-card.front {
+            transform: rotateY(0deg);
+        }
+
+        .auth-card.back {
+            transform: rotateY(180deg);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, rgba(255,255,255,0.9));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .floating-label {
+            position: absolute;
+            left: 1.2rem;
+            top: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            background: transparent;
+            padding: 0 0.3rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .form-input::placeholder {
+            color: transparent;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 0 0 3px rgba(255, 255, 255, 0.1),
+                0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-input:focus + .floating-label,
+        .form-input:not(:placeholder-shown) + .floating-label {
+            top: -0.6rem;
+            left: 1rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.95);
+            background: linear-gradient(to bottom, transparent 0%, rgba(102, 126, 234, 0.8) 20%, rgba(118, 75, 162, 0.8) 80%, transparent 100%);
+            padding: 0 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            font-size: 0.85rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .forgot-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .forgot-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: width 0.3s ease;
+        }
+
+        .forgot-link:hover::after {
+            width: 100%;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+            border: none;
+            border-radius: 16px;
+            color: #667eea;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.2),
+                inset 0 1px 1px rgba(255,255,255,0.5);
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.95) 100%);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.6);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .submit-button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .toggle-link {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .toggle-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #fff;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .terms-text {
+            margin-top: 1.3rem;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0.75;
+            line-height: 1.5;
+        }
+
+        .terms-text a {
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .terms-text a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 2rem;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        .back-home a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-home a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(-3px);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .flip-card-wrapper {
+                height: 620px;
+            }
+
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .card-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .character-container {
+                width: 80px;
+                height: 80px;
+            }
+
+            .character {
+                width: 60px;
+                height: 60px;
+                font-size: 1.6rem;
+            }
+
+            .glow {
+                width: 100px;
+                height: 100px;
+            }
+
+            @keyframes orbit {
+                0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+                100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="auth-container">
+        <div class="logo-section">
+            <div class="character-container">
+                <div class="glow"></div>
+                <div class="character">🧠</div>
+                <div class="orbs">
+                    <div class="orb"></div>
+                    <div class="orb"></div>
+                    <div class="orb"></div>
+                </div>
+            </div>
+            <div class="logo">MOODFLOW</div>
+            <p class="logo-tagline">Welcome to mindful productivity</p>
+        </div>
+
+        <div class="flip-card-wrapper" id="flipCard">
+            <!-- Front Side - Login -->
+            <div class="auth-card front">
+                <div class="card-header">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to continue your journey</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <input 
+                            type="email" 
+                            id="login-email" 
+                            class="form-input" 
+                            placeholder="Email"
+                            required
+                        >
+                        <label class="floating-label" for="login-email">Email address</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            id="login-password" 
+                            class="form-input" 
+                            placeholder="Password"
+                            required
+                        >
+                        <label class="floating-label" for="login-password">Password</label>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="submit-button">Sign In</button>
+
+                    <div class="toggle-text">
+                        Don't have an account? <a class="toggle-link" id="toSignup">Sign up</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Back Side - Signup -->
+            <div class="auth-card back">
+                <div class="card-header">
+                    <h2>Create Account</h2>
+                    <p>Start your productive journey today</p>
+                </div>
+
+                <form id="signupForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input 
+                                type="text" 
+                                id="first-name" 
+                                class="form-input" 
+                                placeholder="First"
+                                required
+                            >
+                            <label class="floating-label" for="first-name">First name</label>
+                        </div>
+                        <div class="form-group">
+                            <input 
+                                type="text" 
+                                id="last-name" 
+                                class="form-input" 
+                                placeholder="Last"
+                                required
+                            >
+                            <label class="floating-label" for="last-name">Last name</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input 
+                            type="email" 
+                            id="signup-email" 
+                            class="form-input" 
+                            placeholder="Email"
+                            required
+                        >
+                        <label class="floating-label" for="signup-email">Email address</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            id="signup-password" 
+                            class="form-input" 
+                            placeholder="Password"
+                            required
+                        >
+                        <label class="floating-label" for="signup-password">Password</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            id="confirm-password" 
+                            class="form-input" 
+                            placeholder="Confirm"
+                            required
+                        >
+                        <label class="floating-label" for="confirm-password">Confirm password</label>
+                    </div>
+
+                    <button type="submit" class="submit-button">Create Account</button>
+
+                    <p class="terms-text">
+                        By signing up, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+                    </p>
+
+                    <div class="toggle-text">
+                        Already have an account? <a class="toggle-link" id="toLogin">Sign in</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="back-home">
+            <a href="#">← Back to home</a>
+        </div>
+    </div>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Parallax effect on scroll
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const stars = document.querySelectorAll('.star');
+                    stars.forEach((star, index) => {
+                        const speed = (index % 3 + 1) * 0.05;
+                        star.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Flip card functionality
+        const flipCard = document.getElementById('flipCard');
+        const toSignup = document.getElementById('toSignup');
+        const toLogin = document.getElementById('toLogin');
+
+        toSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            flipCard.classList.add('flipped');
+        });
+
+        toLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            flipCard.classList.remove('flipped');
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const button = this.querySelector('.submit-button');
+            const originalText = button.textContent;
+            button.textContent = 'Signing in...';
+            button.style.opacity = '0.7';
+            button.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.opacity = '1';
+                button.style.pointerEvents = 'auto';
+                alert('Login successful! Welcome back to MoodFlow.');
+            }, 1500);
+        });
+
+        // Signup form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return;
+            }
+            
+            const button = this.querySelector('.submit-button');
+            const originalText = button.textContent;
+            button.textContent = 'Creating account...';
+            button.style.opacity = '0.7';
+            button.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.opacity = '1';
+                button.style.pointerEvents = 'auto';
+                alert('Account created successfully! Welcome to MoodFlow.');
+            }, 1500);
+        });
+
+        // Floating label behavior (enhanced)
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            // Check on page load if there's a value
+            if (input.value) {
+                input.classList.add('has-value');
+            }
+            
+            // Update on input
+            input.addEventListener('input', function() {
+                if (this.value) {
+                    this.classList.add('has-value');
+                } else {
+                    this.classList.remove('has-value');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
