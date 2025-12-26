@@ -94,28 +94,7 @@ moodflow/
 │       └── logo.svg       # Brand assets
 ├── README.md              # You are here!
 └── LICENSE                # MIT License
-```
 
----
-
-## 🎨 Screenshots
-
-### Landing Page
-<div align="center">
-  <img src="https://via.placeholder.com/800x500/667eea/ffffff?text=Landing+Page+Screenshot" alt="Landing Page" width="80%">
-</div>
-
-### Authentication - 3D Flip Card
-<div align="center">
-  <img src="https://via.placeholder.com/800x500/764ba2/ffffff?text=Login+Page+Screenshot" alt="Login Page" width="45%">
-  <img src="https://via.placeholder.com/800x500/667eea/ffffff?text=Signup+Page+Screenshot" alt="Signup Page" width="45%">
-</div>
-
-### Toast Notifications
-<div align="center">
-  <img src="https://via.placeholder.com/400x100/4ade80/ffffff?text=Success+Toast" alt="Success Toast" width="30%">
-  <img src="https://via.placeholder.com/400x100/f87171/ffffff?text=Error+Toast" alt="Error Toast" width="30%">
-</div>
 
 ---
 
