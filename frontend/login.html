@@ -798,7 +798,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         if (!res.ok) throw new Error(data.message);
 
         alert(data.message);
-        window.location.href = "/";
+        window.location.href = "frontend/app.html";
 
     } catch (err) {
         alert(err.message);
